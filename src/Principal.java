@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 
 public class Principal {
 
-    private static DecimalFormatSymbols symbols;
-
     public static void main(String[] args) {
+
+        System.out.println("\nTeste Infiflex - Projedata!!!");
         // 3.1 - Inserir todos os funcionários
         List<Funcionario> funcionarios = new ArrayList<>(Arrays.asList(
                 new Funcionario("Maria", LocalDate.of(2000, 10, 18), BigDecimal.valueOf(2009.44), "Operador"),
@@ -27,19 +27,18 @@ public class Principal {
                 new Funcionario("Helena", LocalDate.of(1996, 9, 2), BigDecimal.valueOf(2799.93), "Gerente")
         ));
 
-        // 3.2 - Remover o funcionário "João" da lista
-        funcionarios.removeIf(funcionario -> funcionario.getNome().equals("João"));
-
-
         // 3.3 - Imprimir todos os funcionários com todas as informações
         System.out.println("\n________________________________________");
         System.out.println("Lista de Funcionarios:\n");
         funcionarios.forEach(System.out::println);
 
+        // 3.2 - Remover o funcionário "João" da lista
+        System.out.println();
+        System.out.println(funcionarios.removeIf(funcionario -> funcionario.getNome().equals("João")) +
+                "\n(boolean) = Funcionario João Removido.");
         // 3.4 - Aumentar o salário dos funcionários em 10% + formatação
 
         DecimalFormat df = new DecimalFormat("0.##");
-
 
         funcionarios.forEach(funcionario -> {
             BigDecimal aumento = funcionario.getSalario().multiply(new BigDecimal("0.1"));
@@ -93,10 +92,18 @@ public class Principal {
                 .forEach(System.out::println);
 
         // 3.11 - Imprimir o total dos salários dos funcionários
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("pt", "BR"));
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+
+        DecimalFormat df2 = new DecimalFormat("#,##0.00", symbols);
+
         BigDecimal totalSalarios = funcionarios.stream()
                 .map(Funcionario::getSalario)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        System.out.println("\nTotal dos salários dos funcionários: " + df.format(totalSalarios));
+
+        String salarioTotalFormatado = df2.format(totalSalarios);
+        System.out.println("\nTotal dos salários dos funcionários: R$ " + salarioTotalFormatado);
 
         // 3.12 - Imprimir quantos salários mínimos ganha cada funcionário
         BigDecimal salarioMinimo = BigDecimal.valueOf(1212.00);
